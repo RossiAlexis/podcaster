@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, type ReactNode } from "react";
+import { createContext, useCallback, type ReactNode } from "react";
 import { useNavigate, useNavigation } from "react-router";
 
 export type NavigationContextValue = {
