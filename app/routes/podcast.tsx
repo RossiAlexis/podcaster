@@ -8,7 +8,7 @@ export async function clientLoader() {
 }
 
 export default function PodscastDetail() {
-  let params = useParams();
+  const params = useParams();
   return (
     <>
       <h1>Podcast with id {params.podcastId}</h1>
