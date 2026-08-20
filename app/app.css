@@ -4,6 +4,24 @@
   --font-sans:
     "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --color-brand-50: #eff8ff;
+  --color-brand-100: #dbeeff;
+  --color-brand-200: #bfe2ff;
+  --color-brand-500: #1685c5;
+  --color-brand-600: #0873b1;
+  --color-brand-700: #075d8e;
+  --shadow-card: 0 2px 8px rgb(15 23 42 / 0.13);
+}
+
+@layer base {
+  body {
+    @apply min-h-screen bg-slate-50 font-sans text-slate-800 antialiased;
+  }
+
+  button,
+  a {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500;
+  }
 }
 
 html,
