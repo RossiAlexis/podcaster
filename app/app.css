@@ -15,7 +15,7 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-slate-50 font-sans text-slate-800 antialiased;
+    @apply min-h-screen bg-slate-50 font-sans antialiased;
   }
 
   button,
@@ -26,9 +26,10 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
+  @apply bg-white;
+  /* dark:bg-gray-950; */
+  /* 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
-  }
+  } */
 }

@@ -10,9 +10,14 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import stylesheet from "./app.css?url";
-import { NavigationProvider } from "./shared/navigation/NavigationContext";
-import { AppLink } from "./shared/navigation/AppLink";
-import { NavigationIndicator } from "./shared/navigation/NavigationIndicator";
+import { NavigationProvider } from "@/shared/navigation/NavigationContext";
+import { AppLink } from "@/shared/navigation/AppLink";
+import { NavigationIndicator } from "@/shared/navigation/NavigationIndicator";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -46,19 +51,54 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function QueryProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        gcTime: ONE_DAY,
+        staleTime: ONE_DAY,
+      },
+    },
+  });
+
+  if (typeof window === "undefined") {
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+  }
+
+  const asyncStoragePersister = createAsyncStoragePersister({
+    storage: window ? window.localStorage : null,
+    key: "podcaster-query-cache",
+  });
+  return (
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{
+        maxAge: ONE_DAY,
+        persister: asyncStoragePersister,
+      }}
+    >
+      {children}
+    </PersistQueryClientProvider>
+  );
+}
+
 export default function App() {
   return (
-    <NavigationProvider>
-      <header className="border-b border-slate-200 bg-white shadow-sm">
-        <div className="text-brand-600 mx-auto max-w-7xl px-4 py-4 sm:px-6">
-          <AppLink to="/">Podcaster</AppLink>
-          <NavigationIndicator />
+    <QueryProvider>
+      <NavigationProvider>
+        <header className="border-b border-slate-200 bg-white shadow-sm">
+          <div className="text-brand-600 mx-auto max-w-7xl px-4 py-4 sm:px-6">
+            <AppLink to="/">Podcaster</AppLink>
+            <NavigationIndicator />
+          </div>
+        </header>
+        <div className="h-screen">
+          <Outlet />
         </div>
-      </header>
-      <div className="bg-gray-500 h-screen">
-        <Outlet />
-      </div>
-    </NavigationProvider>
+      </NavigationProvider>
+    </QueryProvider>
   );
 }
 
