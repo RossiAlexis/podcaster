@@ -15,7 +15,7 @@ export function usePodcastCatalog(initialData?: PodcastSummary[]) {
     queryFn: fetchPodcastCatalog,
     staleTime: ONE_DAY,
     refetchInterval: ONE_DAY,
-    initialData: initialData || null,
+    initialData: initialData,
   });
 
   const podcasts = useMemo(

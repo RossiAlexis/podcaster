@@ -40,7 +40,9 @@ test("filters the podcast catalog and preserves the search in the URL", async ({
   await expect(resultCount).toHaveText("0");
 });
 
-test("opens the selected podcast detail page", async ({ page }) => {
+test("opens the selected podcast and displays its episodes", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 
@@ -49,12 +51,14 @@ test("opens the selected podcast detail page", async ({ page }) => {
 
   const href = await firstPodcast.getAttribute("href");
   if (!href) throw new Error("The podcast card has no destination");
-  const podcastId = href.split("/").at(-1);
 
   await firstPodcast.click();
 
   await expect.poll(() => new URL(page.url()).pathname).toBe(href);
   await expect(
-    page.getByRole("heading", { name: `Podcast with id ${podcastId}` }),
+    page.getByRole("heading", { name: /^Episodes: \d+$/ }),
   ).toBeVisible();
+  const episodeTable = page.getByRole("table");
+  await expect(episodeTable).toBeVisible();
+  await expect(episodeTable.getByRole("row").nth(1)).toBeVisible();
 });
