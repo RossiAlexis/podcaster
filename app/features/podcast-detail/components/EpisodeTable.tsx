@@ -27,9 +27,7 @@ export function EpisodeTable({ episodes }: EpisodeTableProps) {
               <td className="px-4 py-3">
                 {new Date(episode.releaseDate).toLocaleDateString()}
               </td>
-              <td className="px-4 py-3">
-                {formatDuration(episode.duration)}
-              </td>
+              <td className="px-4 py-3">{formatDuration(episode.duration)}</td>
             </tr>
           ))}
         </tbody>
