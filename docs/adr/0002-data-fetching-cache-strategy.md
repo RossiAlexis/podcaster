@@ -8,7 +8,7 @@ Usar TanStack Query como único mecanismo para obtener, compartir y almacenar en
 
 La caché vive en memoria durante la ejecución y se persiste en `localStorage` mediante `@tanstack/query-sync-storage-persister` y `PersistQueryClientProvider`. Tanto el tiempo máximo de persistencia como el tiempo de garbage collection son de un día. Cada recurso define además un `staleTime` de un día, de acuerdo con el requisito de no volver a solicitar los mismos datos durante ese periodo.
 
-El catálogo utiliza la query key `["podcast-catalog"]`. Los episodios utilizan `["podcast-episodes", podcastId]`, lo que proporciona una entrada y un periodo de frescura independientes para cada podcast.
+El catálogo utiliza la query key `["podcast-catalog"]`. El detalle de cada podcast, incluida su lista de episodios, utiliza `["podcast-detail", podcastId]`, lo que proporciona una entrada y un periodo de frescura independientes para cada podcast.
 
 El `loader` de `/` obtiene el catálogo durante el build para generar HTML con contenido real. Durante la hidratación, esos datos se entregan a la misma query del catálogo mediante `initialData`. El loader mejora el primer renderizado, pero no introduce otra caché ni otro mecanismo de obtención de datos.
 
@@ -40,7 +40,7 @@ El prerenderizado de `/` plantea una necesidad adicional. El HTML debe contener 
 - **Persistencia y funcionamiento offline:** La persistencia actual permite reutilizar datos después de una recarga y conservar datos disponibles temporalmente cuando no hay red. Una experiencia offline completa requeriría decisiones adicionales sobre network modes, reintentos, mutations pendientes, service workers y resolución de conflictos.
 - **SSR o mayor uso de loaders:** TanStack Query admite hidratación y deshidratación de su caché. Si la aplicación adopta SSR, deberá evaluarse la creación de un `QueryClient` por petición y la transferencia explícita de su estado al cliente. El uso actual de `initialData` para una sola ruta no pretende resolver ese escenario completo.
 
-La estrategia puede crecer con la aplicación sin exigir una abstracción propia delante de TanStack Query. Los hooks de cada funcionalidad, como `usePodcastCatalog()` y `useEpisodes(podcastId)`, siguen siendo la API interna de sus consumidores.
+La estrategia puede crecer con la aplicación sin exigir una abstracción propia delante de TanStack Query. Los hooks de cada funcionalidad, como `usePodcastCatalog()` y `usePodcastDetail()`, siguen siendo la API interna de sus consumidores.
 
 ## Opciones consideradas
 

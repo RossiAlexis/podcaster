@@ -16,6 +16,7 @@ import { NavigationIndicator } from "@/shared/navigation/NavigationIndicator";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
@@ -50,17 +51,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
-
-function QueryProvider({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        gcTime: ONE_DAY,
-        staleTime: ONE_DAY,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: ONE_DAY,
+      staleTime: ONE_DAY,
     },
-  });
-
+  },
+});
+function QueryProvider({ children }: { children: React.ReactNode }) {
   if (typeof window === "undefined") {
     return (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -98,6 +97,7 @@ export default function App() {
           <Outlet />
         </div>
       </NavigationProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryProvider>
   );
 }
