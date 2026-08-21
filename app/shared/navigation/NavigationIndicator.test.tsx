@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
-import { NavigationContext } from "./NavigationContext";
-import { NavigationIndicator } from "./NavigationIndicator";
+import { NavigationContext } from "@/shared/navigation/NavigationContext";
+import { NavigationIndicator } from "@/shared/navigation/NavigationIndicator";
 
 describe("Navigation Indicator test", () => {
   test("Pending navigation should be shown when navigation is pending", () => {
