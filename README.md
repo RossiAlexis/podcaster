@@ -614,6 +614,7 @@ Genera en `build/client/` un artefacto estático de unos 892 KB:
 | --------------------- | ------------------------------------------------------- |
 | `index.html`          | `/` prerenderizado con las 100 tarjetas dentro (152 KB) |
 | `__spa-fallback.html` | Shell para las rutas dinámicas (79 KB)                  |
+| `_redirects`          | Reescritura SPA de Cloudflare Pages hacia el fallback   |
 | `_.data`              | Datos del loader que hidratan la query del catálogo     |
 | `assets/`             | Chunks con hash, divididos por ruta (568 KB)            |
 
@@ -632,6 +633,7 @@ La aplicación está desplegada en Cloudflare Pages: **[podcaster-530.pages.dev]
 ```
 .
 ├── app/                     # Código de la aplicación (ver Arquitectura)
+├── public/_redirects        # Reescritura SPA de Cloudflare Pages
 ├── docs/adr/                # Registros de decisiones de arquitectura
 ├── tests/
 │   ├── e2e/                 # Especificaciones de Playwright
