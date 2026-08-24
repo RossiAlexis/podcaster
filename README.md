@@ -271,16 +271,16 @@ La consecuencia arquitectónica importante es que **hay una sola fuente de verda
 
 Cada decisión relevante está registrada antes de escribir el código correspondiente, con las alternativas que se consideraron, lo que se pierde al elegir y las condiciones bajo las cuales habría que reabrir el debate. Esa última sección es la que hace que un ADR siga siendo útil dentro de un año.
 
-| #                                                           | Decisión                       | Qué se eligió                                       | Qué se descartó                                           |
-| ----------------------------------------------------------- | ------------------------------ | --------------------------------------------------- | --------------------------------------------------------- |
-| [0001](docs/adr/0001-application-framework.md)              | React Router en modo framework | `ssr: false` + prerender de `/`                     | Next.js App Router, Vite + router suelto, TanStack Start  |
-| [0002](docs/adr/0002-data-fetching-cache-strategy.md)       | Obtención de datos y caché     | TanStack Query persistido en `localStorage`         | Hooks propios con TTL manual, Context de dominio          |
-| [0003](docs/adr/0003-external-data-validation-with-zod.md)  | Validación de datos externos   | Zod en el borde, transformando al modelo de dominio | Confiar en tipos de TypeScript, Valibot / ArkType / io-ts |
-| [0004](docs/adr/0004-styling-with-tailwind.md)              | Estrategia de estilos          | Tailwind CSS 4 con tokens en `@theme`               | CSS Modules, CSS global manual con BEM                    |
-| [0005](docs/adr/0005-testing-strategy-and-tooling.md)       | Testing                        | Vitest + Testing Library + Playwright               | Jest, Enzyme, Cypress, prescindir de E2E                  |
-| [0006](docs/adr/0006-vertical-slices-by-feature.md)         | Arquitectura                   | Vertical slices por feature                         | Capas horizontales globales, Clean/Hexagonal uniforme     |
-| [0007](docs/adr/0007-rich-episode-descriptions-from-rss.md) | Descripciones enriquecidas     | Apple para metadatos + RSS para el HTML             | `DOMParser`, expresiones regulares sobre XML              |
-| [0008](docs/adr/0008-cloudflare-pages-spa-fallback.md)     | Fallback SPA en Pages          | Copiar el shell a `404.html` en `buildEnd`          | `_redirects` a `__spa-fallback.html`, SPA por defecto de Pages, Function con `200` |
+| #                                                           | Decisión                       | Qué se eligió                                       | Qué se descartó                                                                    |
+| ----------------------------------------------------------- | ------------------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [0001](docs/adr/0001-application-framework.md)              | React Router en modo framework | `ssr: false` + prerender de `/`                     | Next.js App Router, Vite + router suelto, TanStack Start                           |
+| [0002](docs/adr/0002-data-fetching-cache-strategy.md)       | Obtención de datos y caché     | TanStack Query persistido en `localStorage`         | Hooks propios con TTL manual, Context de dominio                                   |
+| [0003](docs/adr/0003-external-data-validation-with-zod.md)  | Validación de datos externos   | Zod en el borde, transformando al modelo de dominio | Confiar en tipos de TypeScript, Valibot / ArkType / io-ts                          |
+| [0004](docs/adr/0004-styling-with-tailwind.md)              | Estrategia de estilos          | Tailwind CSS 4 con tokens en `@theme`               | CSS Modules, CSS global manual con BEM                                             |
+| [0005](docs/adr/0005-testing-strategy-and-tooling.md)       | Testing                        | Vitest + Testing Library + Playwright               | Jest, Enzyme, Cypress, prescindir de E2E                                           |
+| [0006](docs/adr/0006-vertical-slices-by-feature.md)         | Arquitectura                   | Vertical slices por feature                         | Capas horizontales globales, Clean/Hexagonal uniforme                              |
+| [0007](docs/adr/0007-rich-episode-descriptions-from-rss.md) | Descripciones enriquecidas     | Apple para metadatos + RSS para el HTML             | `DOMParser`, expresiones regulares sobre XML                                       |
+| [0008](docs/adr/0008-cloudflare-pages-spa-fallback.md)      | Fallback SPA en Pages          | Copiar el shell a `404.html` en `buildEnd`          | `_redirects` a `__spa-fallback.html`, SPA por defecto de Pages, Function con `200` |
 
 <details>
 <summary><b>Las tres decisiones que más definen el proyecto</b></summary>
