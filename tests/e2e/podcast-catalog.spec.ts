@@ -65,7 +65,9 @@ test("opens the selected podcast and displays its episodes", async ({
   await expect(episodeTable.getByRole("row").nth(1)).toBeVisible();
 });
 
-test("opens an episode detail and supports direct deep-link", async ({ page }) => {
+test("opens an episode detail and supports direct deep-link", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 
