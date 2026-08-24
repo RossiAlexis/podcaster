@@ -280,6 +280,7 @@ Cada decisión relevante está registrada antes de escribir el código correspon
 | [0005](docs/adr/0005-testing-strategy-and-tooling.md)       | Testing                        | Vitest + Testing Library + Playwright               | Jest, Enzyme, Cypress, prescindir de E2E                  |
 | [0006](docs/adr/0006-vertical-slices-by-feature.md)         | Arquitectura                   | Vertical slices por feature                         | Capas horizontales globales, Clean/Hexagonal uniforme     |
 | [0007](docs/adr/0007-rich-episode-descriptions-from-rss.md) | Descripciones enriquecidas     | Apple para metadatos + RSS para el HTML             | `DOMParser`, expresiones regulares sobre XML              |
+| [0008](docs/adr/0008-cloudflare-pages-spa-fallback.md)     | Fallback SPA en Pages          | Copiar el shell a `404.html` en `buildEnd`          | `_redirects` a `__spa-fallback.html`, SPA por defecto de Pages, Function con `200` |
 
 <details>
 <summary><b>Las tres decisiones que más definen el proyecto</b></summary>
@@ -290,7 +291,7 @@ El enunciado valora SSR. La aplicación no tiene sesiones, ni secretos de servid
 
 Se persigue el mismo objetivo —primer renderizado rápido y no vacío— con otro mecanismo: el `loader` de `/` se ejecuta durante el build y genera un HTML con las 100 tarjetas dentro. Se obtiene el beneficio observable de SSR en la ruta con más tráfico, con el coste operativo de un archivo estático.
 
-Lo que se pierde, y está documentado: las rutas de podcast y episodio no se pueden prerenderizar porque sus parámetros no se conocen en build, y el hosting debe reescribirlas al fallback de SPA.
+Lo que se pierde, y está documentado: las rutas de podcast y episodio no se pueden prerenderizar porque sus parámetros no se conocen en build, y el hosting debe reescribirlas al fallback de SPA. En Cloudflare Pages eso no puede ser `__spa-fallback.html`; ver [ADR 0008](docs/adr/0008-cloudflare-pages-spa-fallback.md).
 
 ### Validar en el borde en lugar de confiar en TypeScript ([ADR 0003](docs/adr/0003-external-data-validation-with-zod.md))
 
@@ -614,17 +615,35 @@ Genera en `build/client/` un artefacto estático de unos 892 KB:
 | --------------------- | ------------------------------------------------------- |
 | `index.html`          | `/` prerenderizado con las 100 tarjetas dentro (152 KB) |
 | `__spa-fallback.html` | Shell para las rutas dinámicas (79 KB)                  |
-| `_redirects`          | Reescritura SPA de Cloudflare Pages hacia el fallback   |
+| `404.html`            | Copia del shell para Cloudflare Pages                   |
 | `_.data`              | Datos del loader que hidratan la query del catálogo     |
 | `assets/`             | Chunks con hash, divididos por ruta (568 KB)            |
 
-Sirve desde cualquier CDN o hosting estático, con un único requisito de configuración: **reescribir las rutas que no coincidan con un archivo hacia `__spa-fallback.html`**. Sin esa regla, recargar `/podcast/123/episode/456` devuelve 404. Es la contrapartida documentada de haber elegido un build estático en [ADR 0001](docs/adr/0001-application-framework.md).
+Sirve desde cualquier CDN o hosting estático, con un único requisito de configuración: **reescribir las rutas que no coincidan con un archivo hacia `__spa-fallback.html`**. Sin esa regla, recargar `/podcast/123/episode/456` no hidrata la ruta dinámica. Es la contrapartida documentada de haber elegido un build estático en [ADR 0001](docs/adr/0001-application-framework.md).
 
-Para verificar el build en local, `pnpm start` lo sirve en el puerto por defecto.
+**Cloudflare Pages no tiene un ajuste «rutas desconocidas → `__spa-fallback.html`».** Solo dos modos, detectados por si existe un `404.html` en la raíz:
+
+1. **Sin `404.html` (SPA por defecto):** toda ruta desconocida se sirve como `/` (`index.html`). Aquí eso es el catálogo prerenderizado, así que pegar `/podcast/:id/episode/:id` acaba en el dashboard.
+2. **Con `404.html`:** las rutas desconocidas reciben ese archivo. El navegador conserva la URL; el estado HTTP es `404`.
+
+`/* /__spa-fallback.html 200` en `_redirects` es la receta de React Router para otros hosts. En Pages, `/__spa-fallback.html` se redirige a `/__spa-fallback` (`308`, pretty URLs), vuelve a coincidir con `/*` y produce `TOO_MANY_REDIRECTS`. Workers con `not_found_handling: "single-page-application"` también fija el fallback a `index.html`.
+
+Por eso `buildEnd` en `react-router.config.ts` copia el shell a `404.html`. El detalle, las alternativas y cuándo reabrir el debate (por ejemplo una Pages Function que devolviera `200`) están en [ADR 0008](docs/adr/0008-cloudflare-pages-spa-fallback.md).
+
+`pnpm start` sirve el build con el servidor de React Router; ese servidor ya reescribe las rutas dinámicas y **no** reproduce el comportamiento de Cloudflare Pages.
+
+Para emular Pages en local, incluyendo `404.html` y la ausencia de `_redirects`:
+
+```bash
+pnpm build
+pnpm dlx wrangler pages dev ./build/client --port 8788
+```
+
+Abre `http://127.0.0.1:8788/podcast/1535809341/episode/1000780026927` (o `curl -sI` esa URL). Debe responder `404` con el shell vacío, sin cabecera `Location` y sin las 100 tarjetas del catálogo. `/` debe seguir siendo `200` con el catálogo prerenderizado.
 
 ### Despliegue actual
 
-La aplicación está desplegada en Cloudflare Pages: **[podcaster-530.pages.dev](https://podcaster-530.pages.dev/)**
+La aplicación está desplegada en Cloudflare Pages: **[podcaster-530.pages.dev](https://podcaster-530.pages.dev/)**. El directorio de publicación debe ser `build/client`.
 
 ---
 
@@ -633,13 +652,12 @@ La aplicación está desplegada en Cloudflare Pages: **[podcaster-530.pages.dev]
 ```
 .
 ├── app/                     # Código de la aplicación (ver Arquitectura)
-├── public/_redirects        # Reescritura SPA de Cloudflare Pages
 ├── docs/adr/                # Registros de decisiones de arquitectura
 ├── tests/
 │   ├── e2e/                 # Especificaciones de Playwright
 │   └── setup.ts             # Setup de Vitest y Testing Library
 ├── .github/workflows/ci.yml # Formato, lint, tipos, tests y build
-├── react-router.config.ts   # ssr: false, prerender: ["/"]
+├── react-router.config.ts   # ssr: false, prerender: ["/"], 404.html para Pages
 ├── vite.config.ts           # Plugins de Tailwind y React Router
 ├── vitest.config.ts         # jsdom, setup, exclusión de E2E
 ├── playwright.config.ts     # Chromium, webServer sobre el build

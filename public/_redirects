@@ -1,5 +1,0 @@
-# React Router SPA fallback. `/` still serves the prerendered index.html
-# because existing static files take precedence over this rewrite.
-# https://reactrouter.com/how-to/pre-rendering
-/*    /__spa-fallback.html   200
-/     /index.html   200
