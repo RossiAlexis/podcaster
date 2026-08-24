@@ -21,7 +21,7 @@ function PodcastCard({ podcast }: { podcast: PodcastSummary }) {
 
   return (
     <AppLink
-      className="group mt-16 flex min-h-48 flex-col items-center rounded-lg border border-slate-200 bg-white px-5 pb-5 text-center shadow-card transition hover:-translate-y-1 hover:shadow-lg"
+      className="group mt-16 flex min-h-48 flex-col items-center rounded-lg border border-slate-200 bg-surface px-5 pb-5 text-center shadow-card transition hover:-translate-y-1 hover:shadow-lg"
       to={href}
       viewTransition
     >
