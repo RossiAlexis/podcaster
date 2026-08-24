@@ -1,6 +1,7 @@
 import { z } from "zod";
-import type { PodcastDetail } from "../domain/podcastDetail";
-import type { Episode } from "../domain/episode";
+
+import type { PodcastDetail } from "@/features/podcast-detail/domain/podcastDetail";
+import type { Episode } from "@/features/podcast-detail/episode/domain/episode";
 
 const podcastCollectionSchema = z.object({
   kind: z.literal("podcast"),
@@ -9,11 +10,13 @@ const podcastCollectionSchema = z.object({
   trackName: z.string(),
   artworkUrl600: z.url(),
   primaryGenreName: z.string(),
+  feedUrl: z.url(),
 });
 
 const podcastEpisodeSchema = z.object({
   kind: z.literal("podcast-episode"),
   trackId: z.number(),
+  episodeGuid: z.string(),
   trackName: z.string(),
   releaseDate: z.iso.datetime(),
   trackTimeMillis: z.number().optional(),
@@ -35,6 +38,7 @@ type PodcastDetailResponse = z.infer<typeof episodeResponseSchema>;
 function toEpisode(raw: z.infer<typeof podcastEpisodeSchema>): Episode {
   return {
     id: raw.trackId,
+    guid: raw.episodeGuid,
     title: raw.trackName,
     releaseDate: raw.releaseDate,
     audioUrl: raw.episodeUrl,
@@ -77,6 +81,7 @@ function toPodcastDetail(response: PodcastDetailResponse): PodcastDetail {
     author: podcast.artistName,
     artworkUrl: podcast.artworkUrl600,
     genre: podcast.primaryGenreName,
+    feedUrl: podcast.feedUrl,
     episodes,
   } satisfies PodcastDetail;
 }

@@ -1,4 +1,4 @@
-import type { Episode } from "./episode";
+import type { Episode } from "@/features/podcast-detail/episode/domain/episode";
 
 export interface PodcastDetail {
   id: string;
@@ -6,6 +6,7 @@ export interface PodcastDetail {
   author: string;
   artworkUrl: string;
   genre: string;
+  feedUrl: string;
   description?: string;
   episodes: Episode[];
 }

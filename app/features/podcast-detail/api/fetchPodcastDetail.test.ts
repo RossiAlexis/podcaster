@@ -10,7 +10,7 @@ import {
   vi,
 } from "vitest";
 
-import { fetchPodcastDetail } from "./fetchPodcastDetail";
+import { fetchPodcastDetail } from "@/features/podcast-detail/api/fetchPodcastDetail";
 
 const LOOKUP_URL = "https://itunes.apple.com/lookup";
 const server = setupServer();
@@ -40,10 +40,12 @@ describe("fetchPodcastDetail", () => {
               trackName: "Podcast title",
               artworkUrl600: "https://example.com/podcast.jpg",
               primaryGenreName: "Technology",
+              feedUrl: "https://example.com/feed.xml",
             },
             {
               kind: "podcast-episode",
               trackId: 456,
+              episodeGuid: "episode-guid",
               trackName: "Valid episode",
               releaseDate: "2026-08-20T12:00:00Z",
               trackTimeMillis: 90_000,
@@ -72,9 +74,11 @@ describe("fetchPodcastDetail", () => {
       author: "Podcast author",
       artworkUrl: "https://example.com/podcast.jpg",
       genre: "Technology",
+      feedUrl: "https://example.com/feed.xml",
       episodes: [
         {
           id: 456,
+          guid: "episode-guid",
           title: "Valid episode",
           releaseDate: "2026-08-20T12:00:00Z",
           duration: 90_000,

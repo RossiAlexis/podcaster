@@ -1,6 +1,6 @@
 import { formatDuration } from "@/shared/utils/formatDuration";
-
-import type { Episode } from "../domain/episode";
+import { AppLink } from "@/shared/navigation/AppLink";
+import type { Episode } from "@/features/podcast-detail/episode/domain/episode";
 
 type EpisodeTableProps = {
   episodes: readonly Episode[];
@@ -23,7 +23,14 @@ export function EpisodeTable({ episodes }: EpisodeTableProps) {
               key={episode.id}
               className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50"
             >
-              <td className="px-4 py-3 text-brand-600">{episode.title}</td>
+              <td className="px-4 py-3">
+                <AppLink
+                  className="text-brand-600 hover:underline"
+                  to={`episode/${episode.id}`}
+                >
+                  {episode.title}
+                </AppLink>
+              </td>
               <td className="px-4 py-3">
                 {new Date(episode.releaseDate).toLocaleDateString()}
               </td>

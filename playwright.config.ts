@@ -11,10 +11,10 @@ export default defineConfig({
   },
   webServer: {
     command:
-      "pnpm exec react-router dev --host 127.0.0.1 --port 4173 --strictPort",
+      "pnpm run build && PORT=4173 pnpm exec react-router-serve ./build/server/index.js",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: false,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000,
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });

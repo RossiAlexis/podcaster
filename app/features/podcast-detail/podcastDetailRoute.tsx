@@ -1,6 +1,6 @@
-import { usePodcastDetail } from "./hooks/usePodcastDetail";
-import { EpisodeTable } from "./components/EpisodeTable";
-import { EpisodeListSkeleton } from "./components/PodcastDetailSkeleton";
+import { EpisodeListSkeleton } from "@/features/podcast-detail/components/PodcastDetailSkeleton";
+import { EpisodeTable } from "@/features/podcast-detail/episode/components/EpisodeTable";
+import { usePodcastDetail } from "@/features/podcast-detail/hooks/usePodcastDetail";
 
 export default function PodcastDetailRoute() {
   const { episodes, isPending, isError } = usePodcastDetail();

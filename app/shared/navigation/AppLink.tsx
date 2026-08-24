@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useHref } from "react-router";
 import { useAppNavigation } from "@/shared/navigation/UseAppNavigation";
 
 export function AppLink({
@@ -11,10 +12,12 @@ export function AppLink({
   className?: string;
 }) {
   const { navigate } = useAppNavigation();
+  const href = useHref(to);
+
   return (
     <a
       className={className}
-      href={to}
+      href={href}
       onClick={(event) => {
         if (
           event.button === 0 &&
@@ -24,7 +27,7 @@ export function AppLink({
           !event.altKey
         ) {
           event.preventDefault();
-          navigate(to);
+          navigate(href);
         }
       }}
     >
