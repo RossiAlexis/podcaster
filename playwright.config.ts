@@ -10,8 +10,9 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command:
-      "pnpm run build && PORT=4173 pnpm exec react-router-serve ./build/server/index.js",
+    command: process.env["PLAYWRIGHT_USE_EXISTING_BUILD"]
+      ? "PORT=4173 pnpm exec react-router-serve ./build/server/index.js"
+      : "pnpm run build && PORT=4173 pnpm exec react-router-serve ./build/server/index.js",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: false,
     timeout: 180 * 1000,
