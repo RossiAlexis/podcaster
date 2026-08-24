@@ -30,6 +30,7 @@ export default function PodcastRoute() {
           alt={`${podcast.title} artwork`}
           className="mx-auto aspect-square w-full max-w-64 rounded-md object-cover"
           src={podcast.artworkUrl}
+          style={{ viewTransitionName: "podcast-artwork" }}
         />
         <div className="my-5 border-y border-slate-200 py-4">
           <h2 className="font-bold text-slate-900">{podcast.title}</h2>

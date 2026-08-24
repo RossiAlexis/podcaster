@@ -1,5 +1,6 @@
 import { AppLink } from "@/shared/navigation/AppLink";
 import type { PodcastSummary } from "@/features/podcast-catalog/domain/podcastSummary";
+import { useViewTransitionState } from "react-router";
 
 export function PodcastGrid({
   podcasts,
@@ -15,10 +16,14 @@ export function PodcastGrid({
   );
 }
 function PodcastCard({ podcast }: { podcast: PodcastSummary }) {
+  const href = `/podcast/${podcast.id}`;
+  const isTransitioning = useViewTransitionState(href);
+
   return (
     <AppLink
       className="group mt-16 flex min-h-48 flex-col items-center rounded-lg border border-slate-200 bg-white px-5 pb-5 text-center shadow-card transition hover:-translate-y-1 hover:shadow-lg"
-      to={`/podcast/${podcast.id}`}
+      to={href}
+      viewTransition
     >
       <img
         alt=""
@@ -26,6 +31,9 @@ function PodcastCard({ podcast }: { podcast: PodcastSummary }) {
         height={128}
         loading="lazy"
         src={podcast.artworkUrl}
+        style={{
+          viewTransitionName: isTransitioning ? "podcast-artwork" : "none",
+        }}
         width={128}
       />
       <h2 className="mt-5 line-clamp-2 font-bold uppercase leading-tight text-slate-900">
