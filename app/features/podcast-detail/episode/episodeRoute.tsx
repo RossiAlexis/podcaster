@@ -14,7 +14,7 @@ export default function EpisodeRoute() {
   }
 
   return (
-    <article className="h-fit rounded-lg border border-slate-200 bg-white p-6 shadow-card">
+    <article className="h-fit rounded-lg border border-slate-200 bg-surface p-6 shadow-card">
       <h1 className="border-b border-slate-200 pb-5 text-2xl font-bold">
         {episode.title}
       </h1>

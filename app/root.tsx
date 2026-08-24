@@ -13,12 +13,25 @@ import stylesheet from "./app.css?url";
 import { NavigationProvider } from "@/shared/navigation/NavigationContext";
 import { AppLink } from "@/shared/navigation/AppLink";
 import { NavigationIndicator } from "@/shared/navigation/NavigationIndicator";
+import { ThemeToggle } from "@/shared/theme/ThemeToggle";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
+const THEME_SCRIPT = `
+  (() => {
+    const storedTheme = localStorage.getItem("podcaster-theme");
+    const isDark =
+      storedTheme === "dark" ||
+      (storedTheme !== "light" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+  })();
+`;
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,10 +49,11 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <Meta />
         <Links />
       </head>
@@ -87,10 +101,17 @@ export default function App() {
   return (
     <QueryProvider>
       <NavigationProvider>
-        <header className="border-b border-slate-200 bg-white shadow-sm">
-          <div className="text-brand-600 mx-auto max-w-7xl px-4 py-4 sm:px-6">
-            <AppLink to="/">Podcaster</AppLink>
-            <NavigationIndicator />
+        <header className="border-b border-slate-200 bg-surface shadow-sm">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+            <AppLink className="text-brand-600" to="/">
+              Podcaster
+            </AppLink>
+            <div className="grid grid-cols-[1.5rem_auto] items-center gap-3">
+              <div className="flex size-6 items-center justify-center">
+                <NavigationIndicator />
+              </div>
+              <ThemeToggle />
+            </div>
           </div>
         </header>
         <div className="h-screen">

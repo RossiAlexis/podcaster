@@ -29,7 +29,7 @@ export default function PodcastCatalog({
 
 function ResultsBadge({ count }: { count: number }) {
   return (
-    <output className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-bold text-white">
+    <output className="rounded-lg bg-brand-surface px-3 py-1.5 text-sm font-bold text-white">
       {count}
     </output>
   );
