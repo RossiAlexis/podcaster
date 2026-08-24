@@ -25,7 +25,7 @@ function TestRoot() {
   );
 }
 
-function renderEpisode() {
+function renderEpisode(initialEntry = "/podcast/123/episode/456") {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
@@ -49,7 +49,7 @@ function renderEpisode() {
 
   const view = render(
     <QueryClientProvider client={queryClient}>
-      <RoutesStub initialEntries={["/podcast/123/episode/456"]} />
+      <RoutesStub initialEntries={[initialEntry]} />
     </QueryClientProvider>,
   );
 
@@ -152,6 +152,52 @@ describe("episode route", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "We could not load this episode.",
+    );
+  });
+
+  test("shows a friendly message when the episode id is invalid", async () => {
+    server.use(
+      http.get(LOOKUP_URL, () =>
+        HttpResponse.json({
+          results: [
+            {
+              kind: "podcast",
+              collectionId: 123,
+              artistName: "Podcast author",
+              trackName: "Podcast title",
+              artworkUrl600: "https://example.com/podcast.jpg",
+              primaryGenreName: "Technology",
+              feedUrl: FEED_URL,
+            },
+            {
+              kind: "podcast-episode",
+              trackId: 456,
+              episodeGuid: "episode-guid",
+              trackName: "Episode title",
+              releaseDate: "2026-08-20T12:00:00Z",
+              episodeUrl: "https://example.com/episode.mp3",
+            },
+          ],
+        }),
+      ),
+    );
+
+    renderEpisode("/podcast/123/episode/not-a-number");
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "We could not load this episode.",
+    );
+  });
+
+  test("shows a friendly message when the podcast lookup fails", async () => {
+    server.use(
+      http.get(LOOKUP_URL, () => new HttpResponse(null, { status: 503 })),
+    );
+
+    renderEpisode();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "We could not load this podcast.",
     );
   });
 
