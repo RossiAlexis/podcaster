@@ -2,6 +2,8 @@
 
 Una SPA para explorar los 100 podcasts más populares de Apple, navegar por sus episodios y escucharlos, construida como prueba técnica de frontend.
 
+**▶ Demo en vivo: [podcaster-530.pages.dev](https://podcaster-530.pages.dev/)**
+
 ![React](https://img.shields.io/badge/React-19-087ea4)
 ![React Router](https://img.shields.io/badge/React_Router-8_framework_mode-f44250)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9_strict-3178c6)
@@ -14,8 +16,8 @@ Una SPA para explorar los 100 podcasts más populares de Apple, navegar por sus 
 
 ## Tabla de contenidos
 
-- [Set up](#Set-up)
-- [Guía rápida para quien revisa](#guía-rápida-para-quien-revisa)
+- [Set up](#set-up)
+- [Guía rápida](#guía-rápida)
 - [Trazabilidad: requisitos e implementación](#trazabilidad-requisitos-e-implementación)
 - [Stack tecnológico](#stack-tecnológico)
 - [Arquitectura](#arquitectura)
@@ -25,8 +27,7 @@ Una SPA para explorar los 100 podcasts más populares de Apple, navegar por sus 
 - [Estrategia de tests](#estrategia-de-tests)
 - [Calidad, CI y convenciones](#calidad-ci-y-convenciones)
 - [Build y despliegue](#build-y-despliegue)
-- [Deuda técnica conocida y trade-offs asumidos](#deuda-técnica-conocida-y-trade-offs-asumidos)
-- [Próximos pasos](#próximos-pasos)
+- [Estructura del repositorio](#estructura-del-repositorio)
 
 ---
 
@@ -619,6 +620,10 @@ Genera en `build/client/` un artefacto estático de unos 892 KB:
 Sirve desde cualquier CDN o hosting estático, con un único requisito de configuración: **reescribir las rutas que no coincidan con un archivo hacia `__spa-fallback.html`**. Sin esa regla, recargar `/podcast/123/episode/456` devuelve 404. Es la contrapartida documentada de haber elegido un build estático en [ADR 0001](docs/adr/0001-application-framework.md).
 
 Para verificar el build en local, `pnpm start` lo sirve en el puerto por defecto.
+
+### Despliegue actual
+
+La aplicación está desplegada en Cloudflare Pages: **[podcaster-530.pages.dev](https://podcaster-530.pages.dev/)**
 
 ---
 
