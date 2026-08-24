@@ -10,12 +10,38 @@
   --color-brand-500: #1685c5;
   --color-brand-600: #0873b1;
   --color-brand-700: #075d8e;
+  --color-brand-surface: var(--brand-surface);
+  --color-surface: var(--surface);
   --shadow-card: 0 2px 8px rgb(15 23 42 / 0.13);
 }
 
 @layer base {
+  :root {
+    --brand-surface: #0873b1;
+    --surface: #ffffff;
+  }
+
+  .dark {
+    --brand-surface: #0873b1;
+    --surface: #0f172a;
+    --color-slate-50: #020617;
+    --color-slate-100: #1e293b;
+    --color-slate-200: #334155;
+    --color-slate-300: #475569;
+    --color-slate-500: #94a3b8;
+    --color-slate-600: #94a3b8;
+    --color-slate-700: #cbd5e1;
+    --color-slate-900: #f1f5f9;
+    --color-red-50: #450a0a;
+    --color-red-700: #fca5a5;
+    --color-brand-100: #0c4a6e;
+    --color-brand-200: #7dd3fc;
+    --color-brand-600: #7dd3fc;
+    --color-brand-700: #bae6fd;
+  }
+
   body {
-    @apply min-h-screen bg-slate-50 font-sans antialiased;
+    @apply min-h-screen bg-slate-50 font-sans text-slate-900 antialiased transition-colors;
   }
 
   button,
@@ -34,12 +60,7 @@
 
 html,
 body {
-  @apply bg-white;
-  /* dark:bg-gray-950; */
-  /* 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  } */
+  @apply bg-slate-50;
 }
 
 ::view-transition-group(podcast-artwork) {

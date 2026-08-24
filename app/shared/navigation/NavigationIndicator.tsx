@@ -7,7 +7,7 @@ export function NavigationIndicator() {
   return (
     <div
       aria-label="Loading page"
-      className="fixed right-5 top-5 z-50 size-6 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600"
+      className="size-5 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600"
       role="status"
     />
   );

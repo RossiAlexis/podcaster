@@ -25,7 +25,7 @@ export default function PodcastRoute() {
 
   return (
     <main className="mx-auto grid max-w-7xl gap-7 px-4 py-8 sm:px-6 lg:grid-cols-[18rem_1fr]">
-      <aside className="h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-card">
+      <aside className="h-fit rounded-lg border border-slate-200 bg-surface p-5 shadow-card">
         <img
           alt={`${podcast.title} artwork`}
           className="mx-auto aspect-square w-full max-w-64 rounded-md object-cover"

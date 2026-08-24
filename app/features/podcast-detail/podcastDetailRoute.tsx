@@ -19,7 +19,7 @@ export default function PodcastDetailRoute() {
 
   return (
     <section>
-      <div className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-card">
+      <div className="mb-6 rounded-lg border border-slate-200 bg-surface p-5 shadow-card">
         <h1 className="text-2xl font-bold">Episodes: {episodes.length}</h1>
       </div>
       <EpisodeTable episodes={episodes} />

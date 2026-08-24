@@ -8,7 +8,7 @@ type EpisodeTableProps = {
 
 export function EpisodeTable({ episodes }: EpisodeTableProps) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white shadow-card">
+    <div className="rounded-lg border border-slate-200 bg-surface shadow-card">
       <table className="w-full text-left text-sm">
         <thead className="border-b border-slate-200 bg-slate-50 font-semibold text-slate-700">
           <tr>

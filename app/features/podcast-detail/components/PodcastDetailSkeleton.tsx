@@ -11,10 +11,10 @@ export function EpisodeListSkeleton() {
       role="status"
     >
       <span className="sr-only">Loading episodes…</span>
-      <div className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-card">
+      <div className="mb-6 rounded-lg border border-slate-200 bg-surface p-5 shadow-card">
         <SkeletonBar className="h-8 w-40" />
       </div>
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-card">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-surface shadow-card">
         <div className="grid grid-cols-[1fr_8rem_6rem] gap-4 border-b border-slate-200 bg-slate-50 px-4 py-3">
           <SkeletonBar className="h-5 w-16" />
           <SkeletonBar className="h-5 w-12" />
@@ -46,7 +46,7 @@ export function PodcastDetailSkeleton() {
       <span className="sr-only">Loading podcast…</span>
       <aside
         aria-hidden="true"
-        className="h-fit animate-pulse rounded-lg border border-slate-200 bg-white p-5 shadow-card"
+        className="h-fit animate-pulse rounded-lg border border-slate-200 bg-surface p-5 shadow-card"
       >
         <div className="mx-auto aspect-square w-full max-w-64 rounded-md bg-slate-200" />
         <div className="my-5 space-y-3 border-y border-slate-200 py-4">
