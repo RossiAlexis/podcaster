@@ -6,10 +6,12 @@ export function AppLink({
   to,
   children,
   className,
+  viewTransition = false,
 }: {
   to: string;
   children: ReactNode;
   className?: string;
+  viewTransition?: boolean;
 }) {
   const { navigate } = useAppNavigation();
   const href = useHref(to);
@@ -27,7 +29,7 @@ export function AppLink({
           !event.altKey
         ) {
           event.preventDefault();
-          navigate(href);
+          navigate(href, { viewTransition });
         }
       }}
     >
