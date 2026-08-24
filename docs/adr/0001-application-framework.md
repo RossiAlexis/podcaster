@@ -75,7 +75,7 @@ Este descarte refleja las necesidades y preferencias del proyecto en el momento 
 ## Consecuencias
 
 - El build de producción es estático y no proporciona SSR por petición ni un lugar para lógica exclusiva del servidor.
-- El hosting estático debe reescribir las rutas dinámicas que no coincidan hacia el archivo de fallback de React Router.
+- El hosting estático debe reescribir las rutas dinámicas que no coincidan hacia el archivo de fallback de React Router. En Cloudflare Pages esa reescritura no puede apuntar a `__spa-fallback.html`; el mecanismo concreto está en [ADR 0008](0008-cloudflare-pages-spa-fallback.md).
 - Solo pueden prerenderizarse las rutas cuyos paths y datos estén disponibles durante el build.
 - Los módulos de ruta y el build quedan acoplados a las APIs y al ciclo de actualizaciones del modo framework de React Router.
 - La aplicación obtiene un modelo consistente para routing, datos de las rutas, mutaciones, navegación pendiente y errores de ruta.
