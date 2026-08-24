@@ -1,7 +1,8 @@
 import { Outlet } from "react-router";
 import type { Route } from "./+types/layout";
-import { PodcastDetailSkeleton } from "./components/PodcastDetailSkeleton";
-import { usePodcastDetail } from "./hooks/usePodcastDetail";
+
+import { PodcastDetailSkeleton } from "@/features/podcast-detail/components/PodcastDetailSkeleton";
+import { usePodcastDetail } from "@/features/podcast-detail/hooks/usePodcastDetail";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `Podcast ${params.podcastId} | Podcaster` }];

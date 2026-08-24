@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { formatDuration } from "./formatDuration";
+import { formatDuration } from "@/shared/utils/formatDuration";
 
 describe("formatDuration", () => {
   test.each([

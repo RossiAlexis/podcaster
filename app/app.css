@@ -22,6 +22,14 @@
   a {
     @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500;
   }
+
+  .episode-description a {
+    @apply text-brand-600 underline underline-offset-2;
+  }
+
+  .episode-description a:hover {
+    @apply text-brand-700;
+  }
 }
 
 html,

@@ -1,8 +1,9 @@
-import { useParams } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router";
+
 import type { PodcastSummary } from "@/features/podcast-catalog/domain/podcastSummary";
-import { fetchPodcastDetail } from "../api/fetchPodcastDetail";
-import type { PodcastDetail } from "../domain/podcastDetail";
+import { fetchPodcastDetail } from "@/features/podcast-detail/api/fetchPodcastDetail";
+import type { PodcastDetail } from "@/features/podcast-detail/domain/podcastDetail";
 
 type Podcast = PodcastDetail & { description?: string };
 
