@@ -3,6 +3,7 @@ import type { Route } from "./+types/layout";
 
 import { PodcastDetailSkeleton } from "@/features/podcast-detail/components/PodcastDetailSkeleton";
 import { usePodcastDetail } from "@/features/podcast-detail/hooks/usePodcastDetail";
+import { AppLink } from "@/shared/navigation/AppLink";
 
 export function meta({ params }: Route.MetaArgs) {
   return [{ title: `Podcast ${params.podcastId} | Podcaster` }];
@@ -23,19 +24,25 @@ export default function PodcastRoute() {
     );
   }
 
+  const podcastPath = `/podcast/${podcast.id}`;
+
   return (
     <main className="mx-auto grid max-w-7xl gap-7 px-4 py-8 sm:px-6 lg:grid-cols-[18rem_1fr]">
       <aside className="h-fit rounded-lg border border-slate-200 bg-surface p-5 shadow-card">
-        <img
-          alt={`${podcast.title} artwork`}
-          className="mx-auto aspect-square w-full max-w-64 rounded-md object-cover"
-          src={podcast.artworkUrl}
-          style={{ viewTransitionName: "podcast-artwork" }}
-        />
+        <AppLink to={podcastPath} viewTransition>
+          <img
+            alt={`${podcast.title} artwork`}
+            className="mx-auto aspect-square w-full max-w-64 rounded-md object-cover"
+            src={podcast.artworkUrl}
+            style={{ viewTransitionName: "podcast-artwork" }}
+          />
+        </AppLink>
         <div className="my-5 border-y border-slate-200 py-4">
-          <h2 className="font-bold text-slate-900">{podcast.title}</h2>
+          <h2 className="font-bold text-slate-900">
+            <AppLink to={podcastPath}>{podcast.title}</AppLink>
+          </h2>
           <p className="mt-1 text-sm italic text-slate-600">
-            by {podcast.author}
+            by <AppLink to={podcastPath}>{podcast.author}</AppLink>
           </p>
         </div>
         {podcast.description && (
