@@ -100,7 +100,16 @@ describe("podcast detail route", () => {
     expect(
       await screen.findByRole("heading", { name: "Podcast title" }),
     ).toBeVisible();
-    expect(screen.getByText("by Podcast author")).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: "Podcast title artwork" }),
+    ).toHaveAttribute("href", "/podcast/123");
+    expect(screen.getByRole("link", { name: "Podcast title" })).toHaveAttribute(
+      "href",
+      "/podcast/123",
+    );
+    expect(
+      screen.getByRole("link", { name: "Podcast author" }),
+    ).toHaveAttribute("href", "/podcast/123");
     expect(screen.getByText("Catalog description")).toBeVisible();
     expect(screen.getByRole("heading", { name: "Episodes: 1" })).toBeVisible();
     expect(screen.getByRole("cell", { name: "Episode title" })).toBeVisible();
