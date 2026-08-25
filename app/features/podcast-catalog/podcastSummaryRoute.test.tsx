@@ -159,9 +159,7 @@ describe("PodcastCatalogTests", () => {
 
     renderCatalog([podcasts[0]!]);
 
-    expect(
-      await screen.findByRole("link", { name: /Syntax/ }),
-    ).toBeVisible();
+    expect(await screen.findByRole("link", { name: /Syntax/ })).toBeVisible();
     expect(requestCount).toBe(1);
 
     releaseRequest();
