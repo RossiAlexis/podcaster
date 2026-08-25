@@ -2,6 +2,10 @@ import { EpisodeListSkeleton } from "@/features/podcast-detail/components/Podcas
 import { EpisodeTable } from "@/features/podcast-detail/episode/components/EpisodeTable";
 import { usePodcastDetail } from "@/features/podcast-detail/hooks/usePodcastDetail";
 
+export function meta() {
+  return [{ title: "Podcast Detail | Podcaster" }];
+}
+
 export default function PodcastDetailRoute() {
   const { episodes, isPending, isError } = usePodcastDetail();
 
