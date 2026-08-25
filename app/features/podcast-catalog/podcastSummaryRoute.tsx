@@ -14,16 +14,19 @@ export default function PodcastCatalog({
   const { podcasts, onFilterChange, searchValue } =
     usePodcastCatalog(initialData);
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <div className="mb-5 flex items-center justify-end gap-3">
-        <ResultsBadge count={podcasts.length} />
-        <FilterInput
-          onFilterChange={onFilterChange}
-          searchValue={searchValue}
-        />
-      </div>
-      <PodcastGrid podcasts={podcasts} />
-    </main>
+    <div>
+      <title>Catalogo de podcast | Podcaster</title>
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        <div className="mb-5 flex items-center justify-end gap-3">
+          <ResultsBadge count={podcasts.length} />
+          <FilterInput
+            onFilterChange={onFilterChange}
+            searchValue={searchValue}
+          />
+        </div>
+        <PodcastGrid podcasts={podcasts} />
+      </main>
+    </div>
   );
 }
 

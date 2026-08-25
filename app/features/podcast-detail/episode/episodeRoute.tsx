@@ -2,6 +2,10 @@ import { AudioPlayer } from "@/features/podcast-detail/episode/components/AudioP
 import { EpisodeDescription } from "@/features/podcast-detail/episode/components/EpisodeDescription";
 import { useEpisode } from "@/features/podcast-detail/episode/hooks/useEpisode";
 
+export function meta() {
+  return [{ title: "Podcast Episode | Podcaster" }];
+}
+
 export default function EpisodeRoute() {
   const { episode, isPending, isError } = useEpisode();
 
