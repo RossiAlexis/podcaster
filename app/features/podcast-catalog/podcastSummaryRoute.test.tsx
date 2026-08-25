@@ -20,7 +20,7 @@ import PodcastCatalog from "@/features/podcast-catalog/podcastSummaryRoute";
 
 const CATALOG_URL =
   "https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json";
-const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 const podcasts: PodcastSummary[] = [
   {
@@ -58,7 +58,26 @@ const refreshedPodcast: PodcastSummary = {
   genre: "Technology",
 };
 
-const server = setupServer();
+function catalogResponse(podcastList: PodcastSummary[]) {
+  return HttpResponse.json({
+    feed: {
+      entry: podcastList.map((podcast) => ({
+        id: { attributes: { "im:id": podcast.id } },
+        "im:name": { label: podcast.title },
+        "im:artist": { label: podcast.author },
+        "im:image": [{ label: podcast.artworkUrl }],
+        summary: { label: podcast.description },
+        category: {
+          attributes: { label: podcast.genre },
+        },
+      })),
+    },
+  });
+}
+
+const server = setupServer(
+  http.get(CATALOG_URL, () => catalogResponse(podcasts)),
+);
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => {
@@ -123,50 +142,60 @@ describe("PodcastCatalogTests", () => {
     expect(screen.getByText("1", { selector: "output" })).toBeVisible();
   });
 
-  test("shows refreshed podcasts after the catalog has been open for 24 hours", async () => {
+  test("refreshes the build-time catalog when the page opens", async () => {
+    let requestCount = 0;
+    let releaseRequest: () => void = () => {};
+    const pendingRequest = new Promise<void>((resolve) => {
+      releaseRequest = resolve;
+    });
+
+    server.use(
+      http.get(CATALOG_URL, async () => {
+        requestCount += 1;
+        await pendingRequest;
+        return catalogResponse([refreshedPodcast]);
+      }),
+    );
+
+    renderCatalog([podcasts[0]!]);
+
+    expect(
+      await screen.findByRole("link", { name: /Syntax/ }),
+    ).toBeVisible();
+    expect(requestCount).toBe(1);
+
+    releaseRequest();
+
+    expect(
+      await screen.findByRole("link", { name: /Refreshed podcast/ }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("link", { name: /Syntax/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  test("refreshes the catalog again after 24 hours", async () => {
     let requestCount = 0;
     server.use(
       http.get(CATALOG_URL, () => {
         requestCount += 1;
-        return HttpResponse.json({
-          feed: {
-            entry: [
-              {
-                id: { attributes: { "im:id": refreshedPodcast.id } },
-                "im:name": { label: refreshedPodcast.title },
-                "im:artist": { label: refreshedPodcast.author },
-                "im:image": [{ label: refreshedPodcast.artworkUrl }],
-                summary: { label: refreshedPodcast.description },
-                category: {
-                  attributes: { label: refreshedPodcast.genre },
-                },
-              },
-            ],
-          },
-        });
+        return catalogResponse([refreshedPodcast]);
       }),
     );
     vi.useFakeTimers();
 
-    renderCatalog([podcasts[0]!]);
-
-    await vi.waitFor(() => {
-      expect(screen.getByRole("link", { name: /Syntax/ })).toBeVisible();
-    });
-    expect(requestCount).toBe(0);
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(TWENTY_FOUR_HOURS);
-    });
+    renderCatalog();
 
     await vi.waitFor(() => {
       expect(requestCount).toBe(1);
-      expect(
-        screen.getByRole("link", { name: /Refreshed podcast/ }),
-      ).toBeVisible();
-      expect(
-        screen.queryByRole("link", { name: /Syntax/ }),
-      ).not.toBeInTheDocument();
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ONE_DAY);
+    });
+
+    await vi.waitFor(() => {
+      expect(requestCount).toBe(2);
     });
   });
 });
